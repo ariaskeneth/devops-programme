@@ -122,7 +122,7 @@ Write-Host -ForegroundColor Green "---------------------------------------------
 Write-Host -ForegroundColor Green "IDE installation script finished."
 Write-Host -ForegroundColor Green "--------------------------------------------------------"
 Write-Host "Next Steps:"
-Write-Host "1. Restart your terminal or computer to ensure all new PATH variables are loaded."
+Write-Host "1. Restart your shell or terminal to ensure all new PATH variables are loaded."
 Write-Host "2. You can launch VS Code by typing 'code' in your terminal."
 Write-Host "3. You can launch Git Bash or use 'git' commands in any terminal."
 Write-Host ""

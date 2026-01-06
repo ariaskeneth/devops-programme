@@ -147,6 +147,8 @@ function Install-Docker {
         exit 1
     }
     Write-Host "Docker Desktop installed successfully."
+    Write-Host -ForegroundColor Yellow "A reboot is required to finish installation. Your computer will restart in 5 seconds."
+    Restart-Computer -Force -Delay 5
 }
 
 # Check if Docker is already installed.
@@ -173,7 +175,7 @@ Write-Host -ForegroundColor Green "---------------------------------------------
 Write-Host -ForegroundColor Green "Docker Desktop installation script finished."
 Write-Host -ForegroundColor Green "--------------------------------------------------------"
 Write-Host "Next Steps:"
-Write-Host "1. A system restart might be required for all changes to take effect."
+Write-Host "1. A system restart is required for all changes to take effect."
 Write-Host "2. Start Docker Desktop from the Start Menu. It may perform a one-time setup on its first launch."
 Write-Host "3. After Docker Desktop is running, open a new PowerShell terminal to use 'docker' commands."
 Write-Host ""

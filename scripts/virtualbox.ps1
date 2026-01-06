@@ -31,7 +31,7 @@ function Test-VagrantInstalled {
     Checks if Vagrant is installed by looking for vagrant.exe or checking WinGet.
     #>
     if (Get-Command vagrant.exe -ErrorAction SilentlyContinue) { return $true }
-    winget list --id HashiCorp.Vagrant -e 2>$null | Out-Null
+    winget list --id Hashicorp.Vagrant -e 2>$null | Out-Null
     return $LASTEXITCODE -eq 0
 }
 
@@ -99,7 +99,7 @@ function Install-Vagrant {
     }
 
     Write-Host "Installing HashiCorp Vagrant using WinGet..."
-    winget install -e --id HashiCorp.Vagrant --accept-package-agreements --accept-source-agreements
+    winget install -e --id Hashicorp.Vagrant --accept-package-agreements --accept-source-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Vagrant installation via WinGet failed. Please try installing it manually."
         exit 1
