@@ -85,7 +85,11 @@ function Install-WindowsTerminal {
     #>
     # Windows Terminal executable is 'wt.exe', but it's a store app, so Get-Command might not always find it if the alias isn't set for the admin user context yet.
     # However, winget list is a reliable fallback.
-    $isInstalled = (Get-Command wt -ErrorAction SilentlyContinue) -or (winget list --id Microsoft.WindowsTerminal -e -q 2>$null)
+    $isInstalled = (Get-Command wt -ErrorAction SilentlyContinue)
+    if (-not $isInstalled) {
+         winget list --id Microsoft.WindowsTerminal -e 2>$null | Out-Null
+         $isInstalled = ($LASTEXITCODE -eq 0)
+    }
 
     if ($isInstalled) {
         Write-Host -ForegroundColor Green "Windows Terminal is already installed."

@@ -20,8 +20,9 @@ function Test-VirtualBoxInstalled {
     .SYNOPSIS
     Checks if VirtualBox is installed by looking for VirtualBox.exe or checking WinGet.
     #>
-    return [bool](Get-Command VirtualBox.exe -ErrorAction SilentlyContinue) -or `
-           [bool](winget list --id Oracle.VirtualBox -e -q 2>$null)
+    if (Get-Command VirtualBox.exe -ErrorAction SilentlyContinue) { return $true }
+    winget list --id Oracle.VirtualBox -e 2>$null | Out-Null
+    return $LASTEXITCODE -eq 0
 }
 
 function Test-VagrantInstalled {
@@ -29,8 +30,9 @@ function Test-VagrantInstalled {
     .SYNOPSIS
     Checks if Vagrant is installed by looking for vagrant.exe or checking WinGet.
     #>
-    return [bool](Get-Command vagrant.exe -ErrorAction SilentlyContinue) -or `
-           [bool](winget list --id HashiCorp.Vagrant -e -q 2>$null)
+    if (Get-Command vagrant.exe -ErrorAction SilentlyContinue) { return $true }
+    winget list --id HashiCorp.Vagrant -e 2>$null | Out-Null
+    return $LASTEXITCODE -eq 0
 }
 
 function Test-SyncthingInstalled {
@@ -38,8 +40,9 @@ function Test-SyncthingInstalled {
     .SYNOPSIS
     Checks if Syncthing is installed by looking for syncthing.exe or checking WinGet.
     #>
-    return [bool](Get-Command syncthing.exe -ErrorAction SilentlyContinue) -or `
-           [bool](winget list --id Syncthing.Syncthing -e -q 2>$null)
+    if (Get-Command syncthing.exe -ErrorAction SilentlyContinue) { return $true }
+    winget list --id Syncthing.Syncthing -e 2>$null | Out-Null
+    return $LASTEXITCODE -eq 0
 }
 
 function Install-WinGet {
