@@ -1,4 +1,4 @@
-# DESCRIPTION: This script automates the installation of Oracle VM VirtualBox on Windows using Winget.
+# DESCRIPTION: This script automates the installation of Oracle VM VirtualBox, HashiCorp Vagrant, and Syncthing on Windows using Winget.
 #
 # USAGE: Execute this script with Administrator privileges.
 
@@ -22,6 +22,24 @@ function Test-VirtualBoxInstalled {
     #>
     return [bool](Get-Command VirtualBox.exe -ErrorAction SilentlyContinue) -or `
            [bool](winget list --id Oracle.VirtualBox -e -q 2>$null)
+}
+
+function Test-VagrantInstalled {
+    <#
+    .SYNOPSIS
+    Checks if Vagrant is installed by looking for vagrant.exe or checking WinGet.
+    #>
+    return [bool](Get-Command vagrant.exe -ErrorAction SilentlyContinue) -or `
+           [bool](winget list --id HashiCorp.Vagrant -e -q 2>$null)
+}
+
+function Test-SyncthingInstalled {
+    <#
+    .SYNOPSIS
+    Checks if Syncthing is installed by looking for syncthing.exe or checking WinGet.
+    #>
+    return [bool](Get-Command syncthing.exe -ErrorAction SilentlyContinue) -or `
+           [bool](winget list --id Syncthing.Syncthing -e -q 2>$null)
 }
 
 function Install-WinGet {
@@ -52,6 +70,11 @@ function Install-VirtualBox {
     .SYNOPSIS
     Installs Oracle VM VirtualBox using WinGet.
     #>
+    if (Test-VirtualBoxInstalled) {
+        Write-Host -ForegroundColor Green "VirtualBox is already installed."
+        return
+    }
+
     Write-Host "Installing Oracle VM VirtualBox using WinGet. This may take a few minutes..."
     # Note: VirtualBox installation often requires a reboot for network drivers.
     winget install -e --id Oracle.VirtualBox --accept-package-agreements --accept-source-agreements
@@ -62,26 +85,64 @@ function Install-VirtualBox {
     Write-Host "VirtualBox installed successfully."
 }
 
-# Check if VirtualBox is already installed.
-if (Test-VirtualBoxInstalled) {
-    Write-Host -ForegroundColor Green "VirtualBox seems to be installed already. No action needed."
-    exit
+function Install-Vagrant {
+    <#
+    .SYNOPSIS
+    Installs HashiCorp Vagrant using WinGet.
+    #>
+    if (Test-VagrantInstalled) {
+        Write-Host -ForegroundColor Green "Vagrant is already installed."
+        return
+    }
+
+    Write-Host "Installing HashiCorp Vagrant using WinGet..."
+    winget install -e --id HashiCorp.Vagrant --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Vagrant installation via WinGet failed. Please try installing it manually."
+        exit 1
+    }
+    Write-Host "Vagrant installed successfully."
 }
 
-Write-Host "Starting VirtualBox installation process..."
+function Install-Syncthing {
+    <#
+    .SYNOPSIS
+    Installs Syncthing using WinGet.
+    #>
+    if (Test-SyncthingInstalled) {
+        Write-Host -ForegroundColor Green "Syncthing is already installed."
+        return
+    }
+
+    Write-Host "Installing Syncthing using WinGet..."
+    winget install -e --id Syncthing.Syncthing --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Syncthing installation via WinGet failed. Please try installing it manually."
+        exit 1
+    }
+    Write-Host "Syncthing installed successfully."
+}
+
+Write-Host "Starting Installation Process..."
+Write-Host "Target: VirtualBox, Vagrant, Syncthing"
 
 # 1. Install WinGet package manager if not present.
 Install-WinGet
 
-# 2. Install VirtualBox.
+# 2. Install Applications
 Install-VirtualBox
+Install-Vagrant
+Install-Syncthing
 
 # 3. Post-install instructions.
 Write-Host ""
 Write-Host -ForegroundColor Green "--------------------------------------------------------"
-Write-Host -ForegroundColor Green "VirtualBox installation script finished."
+Write-Host -ForegroundColor Green "Installation script finished."
 Write-Host -ForegroundColor Green "--------------------------------------------------------"
 Write-Host "Next Steps:"
 Write-Host "1. A system restart is highly recommended to complete the installation of VirtualBox network drivers."
-Write-Host "2. Start VirtualBox from the Start Menu."
+Write-Host "2. Verify installations by opening a new terminal and running:"
+Write-Host "   - vagrant --version"
+Write-Host "   - syncthing --version"
+Write-Host "3. Start Syncthing from the Start Menu to set up the web GUI."
 Write-Host ""

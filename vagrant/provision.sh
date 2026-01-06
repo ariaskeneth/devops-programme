@@ -19,7 +19,7 @@ sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='devops'" | g
   || sudo -u postgres createdb -O appuser devops
 sudo -u postgres psql -d devops -f /vagrant/db/init.sql || true
 
-log "Utente applicativo e directory"
+log "App user e directory"
 id -u appuser >/dev/null 2>&1 || useradd -m -s /bin/bash appuser
 install -d -o appuser -g appuser /opt/app
 

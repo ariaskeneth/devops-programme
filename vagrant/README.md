@@ -18,8 +18,8 @@ Questo repository è il template del laboratorio di 16 ore per introdurre le fon
 
 ## Avvio rapido
 ```bash
-git clone <questo-repo> devops-fondamenta
-cd devops-fondamenta
+git clone <questo-repo> devops-intro
+cd devops-intro/vagrant
 vagrant up
 ```
 
@@ -60,7 +60,6 @@ curl -k https://localhost:8443/health
 - `nginx/app.conf`: server block reverse proxy + TLS
 - `db/init.sql`: schema e seed iniziali
 - `scripts/verify.sh`: checks post-provision
-- `quizzes/`: quiz a risposta multipla (uno per modulo)
 
 ## Troubleshooting
 - VM non parte: abilita virtualizzazione in BIOS/UEFI; riduci RAM/CPU nel Vagrantfile
